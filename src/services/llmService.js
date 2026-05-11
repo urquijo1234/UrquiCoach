@@ -17,8 +17,12 @@ async function generatePlanWithLLM(profile) {
     throw new Error('GROQ_API_KEY no está configurada');
   }
 
+  // AGREGA ESTA LÍNEA PARA VER QUÉ PASA
+  const fullUrl = `${env.groq.baseUrl}/chat/completions`.trim();
+  console.log("Intentando llamar a:", `"${fullUrl}"`); 
+
   const response = await axios.post(
-    `${env.groq.baseUrl}/chat/completions`,
+    fullUrl, // Usamos la variable limpia
     {
       model: 'llama-3.3-70b-versatile',
       temperature: 0.7,
@@ -32,7 +36,7 @@ async function generatePlanWithLLM(profile) {
     },
     {
       headers: {
-        Authorization: `Bearer ${env.groq.apiKey}`,
+        Authorization: `Bearer ${env.groq.apiKey.trim()}`, // .trim() por seguridad
         'Content-Type': 'application/json'
       },
       timeout: 30000
