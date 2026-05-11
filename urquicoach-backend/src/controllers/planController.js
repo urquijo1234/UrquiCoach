@@ -27,9 +27,10 @@ async function generatePlan(req, res) {
     }
 
     const profile = {
-      user_id: req.body.user_id,
+      user_id: req.user.user_id,
       age: req.body.age,
-      gender: req.body.gender,
+      // Forzamos minúsculas para que coincida con el ENUM
+  gender: String(req.body.gender).toLowerCase(),
       weight: req.body.weight,
       height: req.body.height,
       goal: req.body.goal,
@@ -63,6 +64,10 @@ async function generatePlan(req, res) {
 
     return res.status(201).json(plan);
   } catch (error) {
+
+// ESTA LÍNEA ES CLAVE: Imprime el error real en tu terminal negra
+    console.error("ERROR DETECTADO EN GENERATE_PLAN:", error.response?.data || error.message);
+
     return res.status(500).json({
       error: 'Error al generar el plan',
       message: error.message
